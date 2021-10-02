@@ -1,0 +1,11 @@
+{
+    "status":"ok",
+    "totalResults":38,
+    "articles":[
+        {"source":
+            {"id":"cnn","name":"CNN"},
+            "author":"Eric Cheung and Brad Lendon, CNN",
+            "title":"China sends more than three dozen warplanes in skies near Taiwan in largest incursion yet - CNN",
+            "description":"China sent 38 warplanes into the skies around Taiwan on Friday, the highest number of Chinese military aircraft to breach the island's Air Defense Identification Zone in a single day since Taipei began publicly reporting such activities last year, Taiwan's De…","url":"https://www.cnn.com/2021/10/01/asia/china-taiwan-warplane-incursion-record-intl-hnk-ml/index.html","urlToImage":"https://cdn.cnn.com/cnnnext/dam/assets/211001202056-j-16-fighter-file-super-tease.jpg","publishedAt":"2021-10-02T04:05:00Z","content":"Taipei, Taiwan (CNN)China sent 38 warplanes into the skies around Taiwan on Friday, the highest number of Chinese military aircraft to breach the island's Air Defense Identification Zone in a single … [+4393 chars]"},{"source":{"id":"cnn","name":"CNN"}
+        
+        ,}
