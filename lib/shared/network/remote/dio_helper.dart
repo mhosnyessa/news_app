@@ -2,15 +2,10 @@ import 'dart:isolate';
 
 import 'package:dio/dio.dart';
 
-class dioHelper {
+class DioHelper {
   static Dio? dio;
   static init() {
-    dio = Dio(
-      BaseOptions(
-        baseUrl: 'https://newsapi.org/',
-        receiveDataWhenStatusError: true,
-      ),
-    );
+    dio = Dio();
   }
 
   static Future<Response?> getData({
@@ -22,7 +17,7 @@ class dioHelper {
         : await dio!
             .get(
             url,
-            queryParameters: query,
+            // queryParameters: query,
           )
             .catchError((e) {
             print('there is an error "getData" : ${e.toString()}');

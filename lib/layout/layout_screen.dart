@@ -9,14 +9,14 @@ class Layout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NewsCubit(),
+      create: (context) => NewsCubit()..newsGetData(),
       child: BlocConsumer<NewsCubit, NewsStates>(
         listener: (context, state) {},
         builder: (BuildContext context, NewsStates state) {
           NewsCubit cubit = NewsCubit.get(context);
           return Scaffold(
             floatingActionButton: FloatingActionButton(onPressed: () {
-              cubit.getData();
+              cubit.newsGetData();
             }),
             appBar: AppBar(
               actions: const [

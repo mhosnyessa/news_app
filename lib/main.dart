@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -8,9 +9,12 @@ import 'layout/layout_depricated.dart';
 import 'layout/page_controller_depricated.dart';
 import 'shared/network/remote/dio_helper.dart';
 
-void main() {
+Future<void> main() async {
   Bloc.observer = MyBlocObserver();
-  dioHelper.init();
+  DioHelper.init();
+  // var dio = Dio();
+  // final response = await dio.get('https://google.com/');
+  // print(response.data);
   runApp(const MyApp());
 }
 
@@ -28,6 +32,9 @@ class MyApp extends StatelessWidget {
 
   ThemeData themeData() {
     return ThemeData(
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: Colors.transparent,
+      ),
       iconTheme: IconThemeData(
         color: Colors.black,
       ),

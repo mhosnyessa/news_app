@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,52 +9,93 @@ import 'package:news_app_cubit_and_dio/cubit/cubt.dart';
 import 'package:news_app_cubit_and_dio/cubit/states.dart';
 import 'package:news_app_cubit_and_dio/shared/components.dart';
 import 'package:news_app_cubit_and_dio/shared/network/remote/dio_helper.dart';
+import 'package:buildcondition/buildcondition.dart';
 
-class BusinessScreen extends StatelessWidget {
-  const BusinessScreen({Key? key}) : super(key: key);
+class businessScreen extends StatelessWidget {
+  const businessScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    NewsCubit cubit = NewsCubit.get(context);
     return BlocConsumer<NewsCubit, NewsStates>(
-      listener: (ctx, state) {},
+      listener: (ctx, state) {
+        // if (state is! NewsFetchedDataState) {
+        //   cubit.newsGetData();
+        // }
+      },
       builder: (context, state) {
-        NewsCubit cubit = NewsCubit.get(context);
-        Map<String, dynamic> query = {
-          'country': 'us',
-          'category': 'business',
-          'api-key': '9fc4698a58ff407aaba9edb4c4cf7283'
-        };
-        var businessNews;
-        dioHelper
-            .getData(url: 'https://newsapi.org/v2/top-headlines', query: query)
-            .then((value) => businessNews = value)
-            .catchError((e) {
-          print(
-              'error in businessNews in business screen getting data ${e.toString()}');
-        });
-        return buildNewsCard();
+        // return buildNewsCard();
+        // cubit.newsGetData();
+        return BuildCondition(
+          condition: cubit.businessNews != null,
+          // builder: (context) => BuildNewsCard(),
+          builder: (context) => ListView.separated(
+              itemBuilder: (ctx, i) {
+                sleep(Duration(milliseconds: 400));
+                return BuildNewsCard(i);
+              },
+              separatorBuilder: (_, i) => SizedBox(
+                    height: 10,
+                  ),
+              itemCount: cubit.businessNews!.data['articles'].length),
+
+          // ListView.builder
+          //
+          // (
+          //     cacheExtent: 50,
+          //     itemBuilder: (ctx, i) {
+          //       sleep(Duration(milliseconds: 400));
+          //       return BuildNewsCard(i);
+          //     }),
+          fallback: (context) => Center(child: CircularProgressIndicator()),
+        );
       },
     );
   }
 
-  Padding buildNewsCard() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [buildImageNewsCard(), SizedBox(width: 10), InfoNewsCard()],
-      ),
+  Widget BuildNewsCard(
+    int i,
+  ) {
+    return BlocConsumer<NewsCubit, NewsStates>(
+      listener: (context, states) {},
+      builder: (context, states) {
+        NewsCubit cubit = NewsCubit.get(context);
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+            onTap: () {
+              cubit.newsOpenArticleBottomSheet(context, i);
+            },
+            onLongPress: () {},
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                buildImageNewsCard(
+                    cubit.businessNews!.data['articles'][i]['urlToImage']),
+                SizedBox(width: 10),
+                InfoNewsCard(
+                  title: cubit.businessNews!.data['articles'][i]['title'],
+                  date: cubit.businessNews!.data['articles'][i]['publishedAt'],
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
-  ClipRRect buildImageNewsCard() {
+  ClipRRect buildImageNewsCard(
+    String? url,
+  ) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
         width: 150,
         height: 100,
         child: Image.network(
-          'https://cdn.cnn.com/cnnnext/dam/assets/211001202056-j-16-fighter-file-super-tease.jpg',
+          url ??
+              'https://previews.123rf.com/images/maxkabakov/maxkabakov1509/maxkabakov150900307/44476813-news-concept-pixelated-text-business-news-on-newspaper-background.jpg',
           fit: BoxFit.cover,
         ),
       ),
@@ -59,19 +104,33 @@ class BusinessScreen extends StatelessWidget {
 }
 
 class InfoNewsCard extends StatelessWidget {
+  final String title;
+  final String date;
   const InfoNewsCard({
     Key? key,
+    required this.title,
+    required this.date,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text('Title', style: Theme.of(context).textTheme.bodyText1),
-        Text('date', style: Theme.of(context).textTheme.bodyText2),
-      ],
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              style: Theme.of(context).textTheme.bodyText1),
+          SizedBox(
+            height: 5,
+          ),
+          Text(date, style: Theme.of(context).textTheme.bodyText2),
+        ],
+      ),
     );
   }
 }
