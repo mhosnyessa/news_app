@@ -8,17 +8,24 @@ class dioHelper {
     dio = Dio(
       BaseOptions(
         baseUrl: 'https://newsapi.org/',
+        receiveDataWhenStatusError: true,
       ),
     );
   }
 
-  static Future<Response> getData({
+  static Future<Response?> getData({
     required String url,
     required Map<String, dynamic> query,
   }) async {
-    return await dio!.get(
-      url,
-      queryParameters: query,
-    );
+    return dio == null
+        ? (null)
+        : await dio!
+            .get(
+            url,
+            queryParameters: query,
+          )
+            .catchError((e) {
+            print('there is an error "getData" : ${e.toString()}');
+          });
   }
 }

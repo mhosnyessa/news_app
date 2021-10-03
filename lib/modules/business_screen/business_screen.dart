@@ -17,10 +17,17 @@ class BusinessScreen extends StatelessWidget {
         NewsCubit cubit = NewsCubit.get(context);
         Map<String, dynamic> query = {
           'country': 'us',
+          'category': 'business',
           'api-key': '9fc4698a58ff407aaba9edb4c4cf7283'
         };
-        var businessNews =
-            dioHelper.getData(url: 'v2/top-headlines', query: query);
+        var businessNews;
+        dioHelper
+            .getData(url: 'https://newsapi.org/v2/top-headlines', query: query)
+            .then((value) => businessNews = value)
+            .catchError((e) {
+          print(
+              'error in businessNews in business screen getting data ${e.toString()}');
+        });
         return buildNewsCard();
       },
     );
