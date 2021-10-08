@@ -38,7 +38,10 @@ class MyApp extends StatelessWidget {
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
-      primaryColor: Colors.white,
+      primaryColor: Colors.purple,
+      colorScheme: ColorScheme.light(
+        secondary: Colors.white,
+      ),
       primarySwatch: Colors.purple,
       scaffoldBackgroundColor: Colors.white,
       textTheme: textTheme(),
@@ -49,9 +52,16 @@ class MyApp extends StatelessWidget {
   TextTheme textTheme() {
     return TextTheme(
       bodyText2: TextStyle(fontSize: 17, color: Colors.grey[800]),
+      headline1: TextStyle(
+          fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
+      headline2: TextStyle(fontSize: 19, color: Colors.black87),
       bodyText1: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
+      ),
+      button: TextStyle(
+        color: Colors.white,
+        fontSize: 30,
       ),
     );
   }

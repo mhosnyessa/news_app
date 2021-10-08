@@ -31,12 +31,9 @@ class businessScreen extends StatelessWidget {
           // builder: (context) => BuildNewsCard(),
           builder: (context) => ListView.separated(
               itemBuilder: (ctx, i) {
-                sleep(Duration(milliseconds: 400));
                 return BuildNewsCard(i);
               },
-              separatorBuilder: (_, i) => SizedBox(
-                    height: 10,
-                  ),
+              separatorBuilder: (_, i) => Divider(),
               itemCount: cubit.businessNews!.data['articles'].length),
 
           // ListView.builder
