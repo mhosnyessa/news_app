@@ -17,7 +17,7 @@ class DioHelper {
         : await dio!
             .get(
             url,
-            // queryParameters: query,
+            queryParameters: query,
           )
             .catchError((e) {
             print('there is an error "getData" : ${e.toString()}');

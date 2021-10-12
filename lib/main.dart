@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
-      primaryColor: Colors.purple,
       colorScheme: ColorScheme.light(
         secondary: Colors.white,
       ),
@@ -50,18 +49,44 @@ class MyApp extends StatelessWidget {
   }
 
   TextTheme textTheme() {
+    double fontSize = 43;
+    String family = 'serif';
+    double lineSpacing = 1.2;
     return TextTheme(
       bodyText2: TextStyle(fontSize: 17, color: Colors.grey[800]),
       headline1: TextStyle(
           fontSize: 30, color: Colors.black, fontWeight: FontWeight.bold),
-      headline2: TextStyle(fontSize: 19, color: Colors.black87),
+      headline2: TextStyle(
+        fontSize: 30,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        // fontFamily: 'Yanone Kaffeesatz',
+      ),
+      //for article title in the bottom sheet
+      caption: TextStyle(
+        height: lineSpacing,
+        fontSize: fontSize,
+        fontFamily: family,
+        fontWeight: FontWeight.bold,
+        foreground: Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..color = Colors.black,
+      ),
+      headline3: TextStyle(
+        height: lineSpacing,
+        fontFamily: family,
+        fontSize: fontSize,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
       bodyText1: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
       button: TextStyle(
         color: Colors.white,
-        fontSize: 30,
+        fontSize: 35,
       ),
     );
   }
