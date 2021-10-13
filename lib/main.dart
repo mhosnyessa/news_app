@@ -1,12 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'bloc_observer.dart';
 import 'layout/layout_screen.dart';
-import 'layout/layout_depricated.dart';
-import 'layout/page_controller_depricated.dart';
 import 'shared/network/remote/dio_helper.dart';
 
 Future<void> main() async {

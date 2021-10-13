@@ -37,8 +37,6 @@ class Layout extends StatelessWidget {
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               items: navigationItems,
-              // selectedItemColor: Colors.purple,
-              //selectedFontSize: 19,
               backgroundColor: Colors.white,
               elevation: 20.0,
               currentIndex: cubit.currentIndex,

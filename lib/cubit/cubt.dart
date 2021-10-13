@@ -14,6 +14,13 @@ import 'package:dio/dio.dart';
 
 import '../shared/network/remote/dio_helper.dart';
 
+enum NewsEnum {
+  business,
+  science,
+  sports,
+  settings,
+}
+
 class NewsCubit extends Cubit<NewsStates> {
   NewsCubit() : super(NewsInitialState());
 
@@ -22,7 +29,7 @@ class NewsCubit extends Cubit<NewsStates> {
   ///these are for the BottomNavigationBar
   List<Widget> pages = [
     const BusinessScreen(),
-    SportsScreen(),
+    const SportsScreen(),
     const ScienceScreen(),
     const SettingsScreen(),
   ];
@@ -40,18 +47,13 @@ class NewsCubit extends Cubit<NewsStates> {
 
   ///
   ///
-  // TO:DO
-  ///
-  ///
-  Response<dynamic>? businessNews;
-  static Map<String, dynamic> query = {
-    'apiKey': '9fc4698a58ff407aaba9edb4c4cf7283',
-    'category': 'business',
-    'country': 'us',
-  };
-
-  ///
-  ///
+  /// getting the news
+  List<Response<dynamic>?>? news;
+  static List<String> categories = [
+    'business',
+    'science',
+    'sports',
+  ];
   void newsChangeBottomNavBar(int index) {
     if (pageController.hasClients) {
       if ((currentIndex - index).abs() > 1) {
@@ -72,16 +74,25 @@ class NewsCubit extends Cubit<NewsStates> {
   }
 
   void newsGetData() {
-    DioHelper.getData(
-            // url:
-            //     'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=9fc4698a58ff407aaba9edb4c4cf7283',
-            url: 'https://newsapi.org/v2/top-headlines',
-            query: query)
-        .then((value) {
-      businessNews = value;
-      print('business news ' + businessNews.toString());
-      emit(NewsFetchedDataState());
-    });
+    for (int i = 0; i < 3; i++) {
+      Map<String, dynamic> query = {
+        'apiKey': '9fc4698a58ff407aaba9edb4c4cf7283',
+        // 'category': categories[i],
+        'category': 'business',
+        'country': 'us',
+      };
+      print('before get data');
+      DioHelper.getData(
+              url: 'https://newsapi.org/v2/top-headlines', query: query)
+          .then((value) {
+        news!.add(value);
+        print('business news ' + news.toString());
+      }).catchError((e) {
+        print('business news ' + e.toString());
+      });
+      print('before get data');
+    }
+    emit(NewsFetchedDataState());
   }
 
   void newsOpenArticleBottomSheet(BuildContext context, int index) {
@@ -90,7 +101,7 @@ class NewsCubit extends Cubit<NewsStates> {
       isScrollControlled: true,
       builder: (context) {
         return BottomArticleContent(
-          news: businessNews,
+          news: news,
           index: index,
         );
       },
@@ -471,28 +482,6 @@ class ArticleTextBottomSheet extends StatelessWidget {
                 .toString()
                 .replaceAllMapped(RegExp(r'\[\+.+\]'), (match) => ''),
           ),
-          // TextSpan(
-          //   children: [
-          //     TextSpan(
-          //       recognizer: TapGestureRecognizer()
-          //         ..onTap = () =>
-          //             launchURL(news.data['articles'][index]['url'] ?? ''),
-          //       text: ' Read more.',
-          //       style: Theme.of(context).textTheme.headline2!.copyWith(
-          //             overflow: TextOverflow.visible,
-          //             fontSize: 30,
-          //             color: Theme.of(context).primaryColor,
-          //             decoration: TextDecoration.underline,
-          //           ),
-          //     ),
-          // WidgetSpan(
-          //   child: Icon(
-          //     Icons.launch,
-          //     color: Theme.of(context).primaryColor,
-          //   ),
-          // ),
-          //   ],
-          // ),
         ],
       ),
     );

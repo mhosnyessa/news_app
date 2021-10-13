@@ -1,17 +1,29 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app_cubit_and_dio/cubit/cubt.dart';
+import 'package:news_app_cubit_and_dio/cubit/states.dart';
+import 'package:news_app_cubit_and_dio/shared/components.dart';
+import 'package:buildcondition/buildcondition.dart';
 
 class SportsScreen extends StatelessWidget {
+  const SportsScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Center(
-        child: Text('Sports Page',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            )),
-      ),
+    return BlocConsumer<NewsCubit, NewsStates>(
+      listener: (ctx, state) {},
+      builder: (context, state) {
+        NewsCubit cubit = NewsCubit.get(context);
+        Response? sportsNews = cubit.news![NewsEnum.sports.index];
+        return BuildCondition(
+          condition: sportsNews != null,
+          builder: (context) => buildNewsList(sportsNews!, cubit),
+          fallback: (context) =>
+              const Center(child: CircularProgressIndicator()),
+        );
+      },
     );
   }
 }
