@@ -16,12 +16,16 @@ class SportsScreen extends StatelessWidget {
       listener: (ctx, state) {},
       builder: (context, state) {
         NewsCubit cubit = NewsCubit.get(context);
-        Response? sportsNews = cubit.news![NewsEnum.sports.index];
+        Response? sportsNews;
+        if (cubit.news != null && cubit.news!.length > NewsEnum.sports.index) {
+          sportsNews = cubit.news![NewsEnum.sports.index];
+        }
         return BuildCondition(
           condition: sportsNews != null,
           builder: (context) => buildNewsList(sportsNews!, cubit),
-          fallback: (context) =>
-              const Center(child: CircularProgressIndicator()),
+          fallback: (context) => const Center(
+            child: CircularProgressIndicator(),
+          ),
         );
       },
     );

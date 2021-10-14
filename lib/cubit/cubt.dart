@@ -39,10 +39,12 @@ class NewsCubit extends Cubit<NewsStates> {
     'Science',
     'Settings',
   ];
-  int currentIndex = 0;
+  static int initialIndex = 1;
+
+  int currentIndex = initialIndex;
   PageController pageController = PageController(
     keepPage: true,
-    initialPage: 0,
+    initialPage: initialIndex,
   );
 
   ///
@@ -77,22 +79,22 @@ class NewsCubit extends Cubit<NewsStates> {
     for (int i = 0; i < 3; i++) {
       Map<String, dynamic> query = {
         'apiKey': '9fc4698a58ff407aaba9edb4c4cf7283',
-        // 'category': categories[i],
-        'category': 'business',
+        'category': categories[i],
         'country': 'us',
       };
-      print('before get data');
+      print('before get data$i');
       DioHelper.getData(
               url: 'https://newsapi.org/v2/top-headlines', query: query)
           .then((value) {
+        news = news ?? [];
         news!.add(value);
         print('business news ' + news.toString());
+        emit(NewsFetchedDataState());
       }).catchError((e) {
         print('business news ' + e.toString());
       });
-      print('before get data');
+      print('after get data' + i.toString());
     }
-    emit(NewsFetchedDataState());
   }
 
   void newsOpenArticleBottomSheet(BuildContext context, int index) {
@@ -120,6 +122,8 @@ class BottomArticleContent extends StatelessWidget {
     required this.news,
     required this.index,
   });
+  @override
+  init() {}
   // BottomArticleContent(Color color, double height, int index, double width,
   // BuildContext context);
   @override
@@ -148,10 +152,10 @@ class BottomArticleContent extends StatelessWidget {
                     'source',
                     style: Theme.of(context).textTheme.button,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
-                  Icon(
+                  const Icon(
                     Icons.launch,
                   ),
                 ],
@@ -172,179 +176,6 @@ class BottomArticleContent extends StatelessWidget {
       ),
     );
   }
-  // Widget build(BuildContext context) {
-  //   double height = 200;
-  //   double width = MediaQuery.of(context).size.width;
-  //   Color color = Colors.purple[50] ?? Colors.white;
-  //   return Column(
-  //     mainAxisSize: MainAxisSize.min,
-  //     children: [
-  //       Stack(
-  //         fit: StackFit.expand,
-  //         children: [
-  //           ClipRRect(
-  //             borderRadius: const BorderRadius.only(
-  //               topLeft: Radius.circular(120),
-  //               topRight: Radius.circular(25),
-  //             ),
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 Container(
-  //                   color: color,
-  //                   height: height,
-  //                   child: Stack(
-  //                     children: [
-  //                       news!.data['articles'][index]['urlToImage'] == null
-  //                           ? Container(
-  //                               color: color,
-  //                               height: double.infinity,
-  //                               width: double.infinity,
-  //                             )
-  //                           : Container(
-  //                               height: height,
-  //                               width: width,
-  //                               child: Image.network(
-  //                                 news!.data['articles'][index]['urlToImage'],
-  //                                 errorBuilder: (context, _, s) {
-  //                                   return Container(
-  //                                     height: height,
-  //                                     width: width,
-  //                                     color: Colors.grey,
-  //                                     child: Center(
-  //                                         child: Text('image not available')),
-  //                                   );
-  //                                 },
-  //                                 fit: BoxFit.cover,
-  //                               ),
-  //                             ),
-  //                       Positioned(
-  //                         child: Container(
-  //                           height: height,
-  //                           width: width,
-  //                           child: Expanded(
-  //                             child: Column(
-  //                               mainAxisSize: MainAxisSize.max,
-  //                               children: [
-  //                                 Spacer(),
-  //                                 Padding(
-  //                                   padding: const EdgeInsets.symmetric(
-  //                                       horizontal: 20.0, vertical: 0.5),
-  //                                   child: Text(
-  //                                     news!.data['articles'][index]['title'],
-  //                                     maxLines: 4,
-  //                                     textAlign: TextAlign.left,
-  //                                     style:
-  //                                         Theme.of(context).textTheme.headline1,
-  //                                     // style: TextStyle(
-  //                                     //   shadows: [
-  //                                     //     Shadow(
-  //                                     //       color: Colors.black12,
-  //                                     //       blurRadius: 0.1,
-  //                                     //       // offset:
-  //                                     //       //     Offset.fromDirection(0.2, 0.2),
-  //                                     //     ),
-  //                                     //   ],
-  //                                     //   color: Colors.black,
-  //                                     //   overflow: TextOverflow.ellipsis,
-  //                                     //   fontSize: 30,
-  //                                     //   fontWeight: FontWeight.bold,
-  //                                     // ),
-  //                                   ),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           ),
-  //                           decoration: BoxDecoration(
-  //                             gradient: LinearGradient(
-  //                               colors: [
-  //                                 color,
-  //                                 Colors.transparent,
-  //                               ],
-  //                               end: Alignment.topCenter,
-  //                               begin: Alignment(0.0, 0.4),
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //           Positioned(
-  //             top: -30,
-  //             child: ElevatedButton(
-  //               onPressed: () {},
-  //               child: RichText(
-  //                 text: TextSpan(children: [
-  //                   TextSpan(
-  //                     recognizer: TapGestureRecognizer()
-  //                       ..onTap = () => launchURL(
-  //                           news!.data['articles'][index]['url'] ?? ''),
-  //                     text: 'Read more.',
-  //                     style: Theme.of(context).textTheme.headline2!.copyWith(
-  //                           fontWeight: FontWeight.w400,
-  //                           color: Theme.of(context).colorScheme.secondary,
-  //                           decoration: TextDecoration.underline,
-  //                         ),
-  //                   ),
-  //                   WidgetSpan(
-  //                     child: Icon(
-  //                       Icons.launch,
-  //                       color: Theme.of(context).colorScheme.secondary,
-  //                     ),
-  //                   ),
-  //                 ]),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //       Container(
-  //         height: 200,
-  //         width: double.infinity,
-  //         color: color,
-  //         padding: EdgeInsets.symmetric(horizontal: 20),
-  //         child: RichText(
-  //           text: TextSpan(
-  //             style: Theme.of(context).textTheme.headline2,
-  //             children: [
-  //               TextSpan(
-  //                 text: (news!.data['articles'][index]['content'] ??
-  //                         'content not available')
-  //                     .toString()
-  //                     .replaceAllMapped(RegExp(r'\[\+.+\]'), (match) => ''),
-  //               ),
-  //               TextSpan(
-  //                 children: [
-  //                   TextSpan(
-  //                     recognizer: TapGestureRecognizer()
-  //                       ..onTap = () => launchURL(
-  //                           news!.data['articles'][index]['url'] ?? ''),
-  //                     text: 'Read more.',
-  //                     style: Theme.of(context).textTheme.headline2!.copyWith(
-  //                           fontWeight: FontWeight.w400,
-  //                           color: Theme.of(context).primaryColor,
-  //                           decoration: TextDecoration.underline,
-  //                         ),
-  //                   ),
-  //                   WidgetSpan(
-  //                     child: Icon(
-  //                       Icons.launch,
-  //                       color: Theme.of(context).primaryColor,
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
 }
 
 class ImageBackgroundBottomSheet extends StatelessWidget {
