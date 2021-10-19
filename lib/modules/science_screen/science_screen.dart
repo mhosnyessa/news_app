@@ -16,7 +16,10 @@ class ScienceScreen extends StatelessWidget {
       listener: (ctx, state) {},
       builder: (context, state) {
         NewsCubit cubit = NewsCubit.get(context);
-        Response? scienceNews = cubit.news![NewsEnum.science.index];
+        Response? scienceNews;
+        if (cubit.news != null && cubit.news!.length > NewsEnum.science.index) {
+          scienceNews = cubit.news![NewsEnum.science.index];
+        }
         return BuildCondition(
           condition: scienceNews != null,
           builder: (context) => buildNewsList(scienceNews!, cubit),
